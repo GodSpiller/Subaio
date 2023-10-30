@@ -1,3 +1,4 @@
+import java.sql.Timestamp;
 import java.util.*;
 
 public class Main {
@@ -7,32 +8,70 @@ public class Main {
         strings.add("mobilepay*benjamin"); strings.add("mobilepay*kåre"); strings.add("paypal"); strings.add("paypal"); strings.add("paypal"); strings.add("Spotify Premium"); strings.add("Spotify Premium"); strings.add("Spotify Premium"); strings.add("løn-01"); strings.add("løn-02"); strings.add("løn-03");
         //Collections.shuffle(strings);
 
-        System.out.println(groupStrings(strings,4));
+        /*
+        long startTime = System.nanoTime();
+        groupStrings(strings, 4);
+        System.out.println("Time: " + (System.nanoTime() - startTime));
+
+        long startTime2 = System.nanoTime();
+        groupStrings2(strings, 4);
+        System.out.println("Time: " + (System.nanoTime() - startTime2));
+        */
+
+        System.out.println(groupStrings2(strings, 4));
 
     }
 
     public static List<List<String>> groupStrings(List<String> stringsToBeGrouped, int editDistanceThreshold){
-        int iterations = 0;
         List<List<String>> groupedStrings = new ArrayList<>();
+
         while (!stringsToBeGrouped.isEmpty()){
-            List<String> grouping = new ArrayList<>();
-            grouping.add(stringsToBeGrouped.get(0));
+            List<String> currentGroup = new ArrayList<>();
+            String current = stringsToBeGrouped.get(0);
+            currentGroup.add(current);
             stringsToBeGrouped.remove(0);
 
-            for (int i = 1; i < stringsToBeGrouped.size(); i++){
+            for (int i = 0; i < stringsToBeGrouped.size(); i++){
                 String next = stringsToBeGrouped.get(i);
-                if (editDistance(grouping.get(0), next, grouping.get(0).length(), next.length()) <= editDistanceThreshold){
-                    grouping.add(next);
+
+                if (editDistance(current, next, currentGroup.get(0).length(), next.length()) <= editDistanceThreshold){
+                    currentGroup.add(next);
                     stringsToBeGrouped.remove(i);
                     i--;
                 }
-
+                else {
+                    break;
+                }
             }
-            System.out.println(++iterations);
-            groupedStrings.add(grouping);
+
+            groupedStrings.add(currentGroup);
         }
 
         return groupedStrings;
+    }
+
+    public static List<List<String>> groupStrings2(List<String> stringsToBeGrouped, int editDistanceThreshold) {
+        HashMap<String, List<String>> groupedStrings = new HashMap<>();
+
+        for (String current : stringsToBeGrouped) {
+            boolean grouped = false;
+            for (HashMap.Entry<String, List<String>> entry : groupedStrings.entrySet()) {
+                String key = entry.getKey();
+                if (editDistance(current, key, current.length(), key.length()) <= editDistanceThreshold) {
+                    entry.getValue().add(current);
+                    grouped = true;
+                    break;
+                }
+            }
+
+            if (!grouped) {
+                List<String> newGroup = new ArrayList<>();
+                newGroup.add(current);
+                groupedStrings.put(current, newGroup);
+            }
+        }
+
+        return new ArrayList<>(groupedStrings.values());
     }
 
     static int editDistance(String str1, String str2, int m, int n)
