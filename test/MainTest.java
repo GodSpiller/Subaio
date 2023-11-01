@@ -57,7 +57,7 @@ public class MainTest {
         input2.add("mobilepay*benjamin"); input2.add("mobilepay*kåre"); input2.add("paypal"); input2.add("paypal"); input2.add("paypal"); input2.add("Spotify Premium"); input2.add("Spotify Premium"); input2.add("Spotify Premium"); input2.add("løn-01"); input2.add("løn-02"); input2.add("løn-03"); input2.add("løn-010000");
 
         //act
-        List<List<String>> results = Main.groupStrings2(input2, 4);
+        List<List<String>> results = Main.groupStrings(input2, 4);
 
         //assert
         for (List<String> result : results) {
@@ -76,9 +76,10 @@ public class MainTest {
         int editDistanceThreshold = 4;
         List<String> input1 = new ArrayList<>();
         input1.add("mobilepay*benjamin"); input1.add("mobilepay*kåre"); input1.add("paypal"); input1.add("paypal"); input1.add("paypal"); input1.add("Spotify Premium"); input1.add("Spotify Premium"); input1.add("Spotify Premium"); input1.add("løn-01"); input1.add("løn-02"); input1.add("løn-03");
+        Collections.shuffle(input1);
 
         //act
-        List<List<String>> results = Main.groupStrings2(input1, 4);
+        List<List<String>> results = Main.groupStrings(input1, 4);
 
         //assert
         for (List<String> result : results) {

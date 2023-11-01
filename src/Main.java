@@ -1,4 +1,3 @@
-import java.sql.Timestamp;
 import java.util.*;
 
 public class Main {
@@ -13,14 +12,8 @@ public class Main {
             input2.add("paypal");
         }
 
-        /*
-        long startTime = System.nanoTime();
-        groupStrings(input2, 4);
-        System.out.println("Time: " + (System.nanoTime() - startTime));
-        */
-
         long startTime2 = System.nanoTime();
-        groupStrings2(input2, 4);
+        groupStrings(input2, 4);
         System.out.println("Time: " + (System.nanoTime() - startTime2));
 
         //System.out.println(editDistance("løn-01", "løn-010000", 6, 10));
@@ -28,35 +21,7 @@ public class Main {
 
     }
 
-    public static List<List<String>> groupStrings(List<String> stringsToBeGrouped, int editDistanceThreshold){
-        List<List<String>> groupedStrings = new ArrayList<>();
-
-        while (!stringsToBeGrouped.isEmpty()){
-            List<String> currentGroup = new ArrayList<>();
-            String current = stringsToBeGrouped.get(0);
-            currentGroup.add(current);
-            stringsToBeGrouped.remove(0);
-
-            for (int i = 0; i < stringsToBeGrouped.size(); i++){
-                String next = stringsToBeGrouped.get(i);
-
-                if (editDistance(current, next, currentGroup.get(0).length(), next.length()) <= editDistanceThreshold){
-                    currentGroup.add(next);
-                    stringsToBeGrouped.remove(i);
-                    i--;
-                }
-                else {
-                    break;
-                }
-            }
-
-            groupedStrings.add(currentGroup);
-        }
-
-        return groupedStrings;
-    }
-
-    public static List<List<String>> groupStrings2(List<String> stringsToBeGrouped, int editDistanceThreshold) {
+    public static List<List<String>> groupStrings(List<String> stringsToBeGrouped, int editDistanceThreshold) {
         HashMap<String, List<String>> groupedStrings = new HashMap<>();
 
         for (String current : stringsToBeGrouped) {
