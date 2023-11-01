@@ -13,11 +13,11 @@ public class Main {
         }
 
         long startTime2 = System.nanoTime();
-        groupStrings(input2, 4);
+        groupStrings(input1, 4);
         System.out.println("Time: " + (System.nanoTime() - startTime2));
 
-        //System.out.println(editDistance("løn-01", "løn-010000", 6, 10));
-        //System.out.println(groupStrings2(input2, 4));
+
+        System.out.println(groupStrings(input1, 4));
 
     }
 
@@ -28,16 +28,18 @@ public class Main {
             boolean grouped = false;
             for (HashMap.Entry<String, List<String>> entry : groupedStrings.entrySet()) {
                 String key = entry.getKey();
-                 if (editDistance(current, key, current.length(), key.length()) <= editDistanceThreshold) {
-                     if (key.equals(current)) {
-                         entry.getValue().add(current);
-                         grouped = true;
-                         break;
-                     }
-                    else if (belongsInGroup(current, entry.getValue(), editDistanceThreshold)) {
-                        entry.getValue().add(current);
-                        grouped = true;
-                        break;
+
+                if (Math.abs(current.length() - key.length()) < editDistanceThreshold) {
+                    if (editDistance(current, key, current.length(), key.length()) <= editDistanceThreshold) {
+                        if (key.equals(current)) {
+                            entry.getValue().add(current);
+                            grouped = true;
+                            break;
+                        } else if (belongsInGroup(current, entry.getValue(), editDistanceThreshold)) {
+                            entry.getValue().add(current);
+                            grouped = true;
+                            break;
+                        }
                     }
                 }
             }
