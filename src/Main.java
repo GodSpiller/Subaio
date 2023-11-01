@@ -6,23 +6,25 @@ public class Main {
 
         List<String> input1 = new ArrayList<>();
         input1.add("mobilepay*benjamin"); input1.add("mobilepay*kåre"); input1.add("paypal"); input1.add("paypal"); input1.add("paypal"); input1.add("Spotify Premium"); input1.add("Spotify Premium"); input1.add("Spotify Premium"); input1.add("løn-01"); input1.add("løn-02"); input1.add("løn-03");
-        //Collections.shuffle(strings);
         List<String> input2 = new ArrayList<>();
         input2.add("mobilepay*benjamin"); input2.add("mobilepay*kåre"); input2.add("paypal"); input2.add("paypal"); input2.add("paypal"); input2.add("Spotify Premium"); input2.add("Spotify Premium"); input2.add("Spotify Premium"); input2.add("løn-01"); input2.add("løn-02"); input2.add("løn-03"); input2.add("løn-010000");
 
+        for (int i = 0; i <1000; i++){
+            input2.add("paypal");
+        }
+
         /*
         long startTime = System.nanoTime();
-        groupStrings(strings, 4);
+        groupStrings(input2, 4);
         System.out.println("Time: " + (System.nanoTime() - startTime));
-
-        long startTime2 = System.nanoTime();
-        groupStrings2(strings, 4);
-        System.out.println("Time: " + (System.nanoTime() - startTime2));
         */
 
+        long startTime2 = System.nanoTime();
+        groupStrings2(input2, 4);
+        System.out.println("Time: " + (System.nanoTime() - startTime2));
 
         //System.out.println(editDistance("løn-01", "løn-010000", 6, 10));
-        System.out.println(groupStrings2(input2, 4));
+        //System.out.println(groupStrings2(input2, 4));
 
     }
 
@@ -61,15 +63,17 @@ public class Main {
             boolean grouped = false;
             for (HashMap.Entry<String, List<String>> entry : groupedStrings.entrySet()) {
                 String key = entry.getKey();
-                if (editDistance(current, key, current.length(), key.length()) <= editDistanceThreshold) {
-                    for (String s : entry.getValue()) {
-                        if (!(editDistance(current, s, current.length(), s.length()) <= editDistanceThreshold)) {
-                            break;
-                        }
+                 if (editDistance(current, key, current.length(), key.length()) <= editDistanceThreshold) {
+                     if (key.equals(current)) {
+                         entry.getValue().add(current);
+                         grouped = true;
+                         break;
+                     }
+                    else if (belongsInGroup(current, entry.getValue(), editDistanceThreshold)) {
+                        entry.getValue().add(current);
+                        grouped = true;
+                        break;
                     }
-                    entry.getValue().add(current);
-                    grouped = true;
-                    break;
                 }
             }
 
@@ -81,6 +85,15 @@ public class Main {
         }
 
         return new ArrayList<>(groupedStrings.values());
+    }
+
+    static boolean belongsInGroup(String current, List<String> group, int editDistanceThreshold){
+        for (String s : group){
+            if (editDistance(current, s, current.length(), s.length()) > editDistanceThreshold){
+                return false;
+            }
+        }
+        return true;
     }
 
     static int editDistance(String str1, String str2, int m, int n)
