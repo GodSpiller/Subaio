@@ -4,9 +4,11 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) {
 
-        List<String> strings = new ArrayList<>();
-        strings.add("mobilepay*benjamin"); strings.add("mobilepay*kåre"); strings.add("paypal"); strings.add("paypal"); strings.add("paypal"); strings.add("Spotify Premium"); strings.add("Spotify Premium"); strings.add("Spotify Premium"); strings.add("løn-01"); strings.add("løn-02"); strings.add("løn-03");
+        List<String> input1 = new ArrayList<>();
+        input1.add("mobilepay*benjamin"); input1.add("mobilepay*kåre"); input1.add("paypal"); input1.add("paypal"); input1.add("paypal"); input1.add("Spotify Premium"); input1.add("Spotify Premium"); input1.add("Spotify Premium"); input1.add("løn-01"); input1.add("løn-02"); input1.add("løn-03");
         //Collections.shuffle(strings);
+        List<String> input2 = new ArrayList<>();
+        input2.add("mobilepay*benjamin"); input2.add("mobilepay*kåre"); input2.add("paypal"); input2.add("paypal"); input2.add("paypal"); input2.add("Spotify Premium"); input2.add("Spotify Premium"); input2.add("Spotify Premium"); input2.add("løn-01"); input2.add("løn-02"); input2.add("løn-03"); input2.add("løn-010000");
 
         /*
         long startTime = System.nanoTime();
@@ -18,7 +20,9 @@ public class Main {
         System.out.println("Time: " + (System.nanoTime() - startTime2));
         */
 
-        System.out.println(groupStrings2(strings, 4));
+
+        //System.out.println(editDistance("løn-01", "løn-010000", 6, 10));
+        System.out.println(groupStrings2(input2, 4));
 
     }
 
@@ -58,6 +62,11 @@ public class Main {
             for (HashMap.Entry<String, List<String>> entry : groupedStrings.entrySet()) {
                 String key = entry.getKey();
                 if (editDistance(current, key, current.length(), key.length()) <= editDistanceThreshold) {
+                    for (String s : entry.getValue()) {
+                        if (!(editDistance(current, s, current.length(), s.length()) <= editDistanceThreshold)) {
+                            break;
+                        }
+                    }
                     entry.getValue().add(current);
                     grouped = true;
                     break;
